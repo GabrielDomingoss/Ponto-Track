@@ -47,15 +47,6 @@ git clone https://github.com/GabrielDomingoss/ponto-track-app.git
 
 ### Instalando as dependencias
 
-#### Frontend 
-
-```bash
-cd ponto-track-app/ponto-track-web
-yarn install
-# ou
-npm install
-```
-
 #### Backend
 
 ```bash
