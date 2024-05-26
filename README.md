@@ -34,7 +34,7 @@ O frontend foi desenvolvido com React utilizando Vite, Material UI com Styled Co
 ### Backend
 
 - Node.js
-- Express
+- Fastify
 - TypeScript
 
 ## Pré-requisitos
