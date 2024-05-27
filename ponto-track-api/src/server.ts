@@ -1,14 +1,18 @@
 import fastify from "fastify";
+import { knex } from "./database";
+import { env } from "./env";
+import { usersRoutes } from "./routes/users";
 
-const app = fastify()
+const app = fastify();
 
-
-app.get('/hello', () => {
-    return 'Hello world'
+app.register(usersRoutes, {
+  prefix: 'users'
 })
 
-app.listen({
-    port: 3333
-}).then(() => {
-    console.log("HTTP Server Running!")
-})
+app
+  .listen({
+    port: env.PORT,
+  })
+  .then(() => {
+    console.log("HTTP Server Running!");
+  });
