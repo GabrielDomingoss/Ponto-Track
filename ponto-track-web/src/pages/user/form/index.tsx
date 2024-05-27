@@ -11,6 +11,7 @@ import { useCallback, useState } from 'react'
 import { IUser } from '../../../models/user'
 import { useNavigate } from 'react-router-dom'
 import api from '../../../services/api'
+import { DatePicker } from '@mui/x-date-pickers'
 
 export function UserForm() {
   const navigate = useNavigate()
@@ -39,16 +40,16 @@ export function UserForm() {
         phone: userData.phone,
         address: userData.address,
         birth: userData.birth,
-        password: userData.password,
+        password: 'senha123',
       }
 
       try {
-        const response = await api.post('/api/register', data)
+        const response = await api.post('/api/users', data)
         if (response.status === 200) {
           navigate('/pets')
         }
       } catch (err: any) {
-        console.log(err?.response?.statusText)
+        console.log(err?.response)
       }
     },
     [userData, navigate],
@@ -102,7 +103,7 @@ export function UserForm() {
                 <FormLabel>Endereço</FormLabel>
                 <TextField
                   required
-                  placeholder="Insira o seu CPF"
+                  placeholder="Insira o seu endereço"
                   size="small"
                   value={userData.address}
                   onChange={(e) =>
@@ -124,6 +125,27 @@ export function UserForm() {
                     handleChangeUserData('phone', e.target.value)
                   }
                 ></TextField>
+              </FormControl>
+            </Grid>
+          </Grid>
+
+          <Grid container marginBottom={2} spacing={3}>
+            <Grid item xs>
+              <FormControl fullWidth variant="outlined">
+                <FormLabel>Data de Nascimento</FormLabel>
+                <DatePicker
+                  value={userData.birth}
+                  onChange={(newValue) =>
+                    handleChangeUserData('birth', newValue!)
+                  }
+                  slotProps={{
+                    textField: {
+                      required: true,
+                      size: 'small',
+                      placeholder: 'Insira sua data de nascimento',
+                    },
+                  }}
+                ></DatePicker>
               </FormControl>
             </Grid>
           </Grid>

@@ -9,7 +9,7 @@ export function Router() {
     <Routes>
       <Route path="/login" element={<Login />}></Route>
       <Route path="/" element={<DefaultLayout />}>
-        <Route path='/users/list' element={<UsersList />}></Route>
+        <Route path='/users' element={<UsersList />}></Route>
         <Route path='/users/form' element={<UserForm />}></Route>
       </Route>
     </Routes>
