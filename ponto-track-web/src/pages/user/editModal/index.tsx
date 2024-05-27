@@ -1,36 +1,77 @@
 import {
-  CardContent,
+  Dialog,
+  DialogContent,
+  DialogTitle,
   FormControl,
   FormLabel,
   Grid,
-  Paper,
   TextField,
 } from '@mui/material'
-import { Button } from '../../../components/Button'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { IUser } from '../../../models/user'
-import { useNavigate } from 'react-router-dom'
 import api from '../../../services/api'
+import { Button } from '../../../components/Button'
 import { DatePicker } from '@mui/x-date-pickers'
 import dayjs from 'dayjs'
 
-export function UserForm() {
-  const navigate = useNavigate()
+interface EditUserModalProps {
+  isEdit: boolean
+  handleClose: () => void
+  id?: string
+  open: boolean
+}
+export function EditModal({
+  isEdit,
+  handleClose,
+  id,
+  open,
+}: EditUserModalProps) {
   const [userData, setUserData] = useState<IUser>({
     name: '',
     email: '',
     phone: '',
     address: '',
-    birth: dayjs(),
+    birth: '',
     password: '',
   })
-
   const handleChangeUserData = useCallback(
     (property: string, value: string) => {
       setUserData({ ...userData, [property]: value })
     },
     [userData],
   )
+
+  useEffect(() => {
+    const handleGetUserData = async () => {
+      try {
+        const response = await api.get(`/api/users/${id}`)
+        if (response.status === 200) {
+          const responseData = response.data.user
+          const dateBirthFormated = responseData.birth.split('-')
+          const user = {
+            name: responseData.name,
+            email: responseData.email,
+            phone: responseData.phone,
+            address: responseData.address,
+            password: responseData.password,
+            birth:
+              dateBirthFormated[0] +
+              '-' +
+              dateBirthFormated[1] +
+              '-' +
+              dateBirthFormated[2],
+          }
+          setUserData(user)
+        }
+      } catch (err: any) {
+        console.log(err?.response)
+      }
+    }
+
+    if (id) {
+      handleGetUserData()
+    }
+  }, [id])
 
   const handleSubmit = useCallback(
     async (e: { preventDefault: () => void }) => {
@@ -45,26 +86,30 @@ export function UserForm() {
       }
 
       try {
-        const response = await api.post('/api/users', data)
-        if (response.status === 200) {
-          navigate('/pets')
+        const response = await api.put(`/api/users/${id}`, data)
+        if (response.status === 201) {
+          handleClose()
         }
       } catch (err: any) {
         console.log(err?.response)
       }
     },
-    [userData, navigate],
+    [
+      handleClose,
+      id,
+      userData.address,
+      userData.birth,
+      userData.email,
+      userData.name,
+      userData.phone,
+    ],
   )
-
   return (
-    <Paper elevation={0}>
-      <CardContent>
-        <Grid container marginBottom={2}>
-          <Grid item xs>
-            <h2>Cadastro de usuário</h2>
-          </Grid>
-        </Grid>
-
+    <Dialog onClose={handleClose} open={open}>
+      <DialogTitle>
+        {isEdit ? 'Editar Usuário' : 'Visualizar Usuário'}
+      </DialogTitle>
+      <DialogContent>
         <form onSubmit={handleSubmit}>
           <Grid container marginBottom={2} marginTop={2}>
             <Grid item xs>
@@ -73,7 +118,7 @@ export function UserForm() {
                 <TextField
                   required
                   placeholder="Seu nome"
-                  size="small"
+                  disabled={!isEdit}
                   value={userData.name}
                   onChange={(e) => handleChangeUserData('name', e.target.value)}
                 ></TextField>
@@ -88,7 +133,7 @@ export function UserForm() {
                 <TextField
                   required
                   placeholder="Insira o seu e-mail"
-                  size="small"
+                  disabled={!isEdit}
                   value={userData.email}
                   onChange={(e) =>
                     handleChangeUserData('email', e.target.value)
@@ -105,7 +150,7 @@ export function UserForm() {
                 <TextField
                   required
                   placeholder="Insira o seu endereço"
-                  size="small"
+                  disabled={!isEdit}
                   value={userData.address}
                   onChange={(e) =>
                     handleChangeUserData('address', e.target.value)
@@ -120,7 +165,7 @@ export function UserForm() {
                 <TextField
                   required
                   placeholder="Insira o seu telefone"
-                  size="small"
+                  disabled={!isEdit}
                   value={userData.phone}
                   onChange={(e) =>
                     handleChangeUserData('phone', e.target.value)
@@ -142,8 +187,10 @@ export function UserForm() {
                       dayjs(newValue).format('YYYY-MM-DD'),
                     )
                   }
+                  disabled={!isEdit}
                   slotProps={{
                     textField: {
+                      disabled: !isEdit,
                       required: true,
                       size: 'small',
                       placeholder: 'Insira sua data de nascimento',
@@ -154,15 +201,28 @@ export function UserForm() {
             </Grid>
           </Grid>
 
-          <Grid container marginBottom={2}>
+          <Grid
+            container
+            marginBottom={2}
+            spacing={3}
+            display={'flex'}
+            justifyContent={'end'}
+          >
             <Grid item xs>
-              <Button variant="contained" fullWidth type="submit">
-                Cadastrar
+              <Button variant="contained" fullWidth onClick={handleClose}>
+                {isEdit ? 'Cancelar' : 'Fechar'}
               </Button>
             </Grid>
+            {isEdit && (
+              <Grid item xs>
+                <Button variant="contained" fullWidth type="submit">
+                  {isEdit ? 'Salvar' : 'Cadastrar'}
+                </Button>
+              </Grid>
+            )}
           </Grid>
         </form>
-      </CardContent>
-    </Paper>
+      </DialogContent>
+    </Dialog>
   )
 }
