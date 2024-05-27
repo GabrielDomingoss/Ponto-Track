@@ -1,5 +1,5 @@
 import { CardContent, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { IUser } from '../../../models/user'
 import api from '../../../services/api';
 

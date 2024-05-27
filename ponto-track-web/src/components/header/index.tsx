@@ -12,7 +12,7 @@ interface HeaderProps extends AppBarProps{
 
 export function Header({open, handleDrawerOpen, drawerWidth=240, ...props}: HeaderProps) {
     return (
-        <AppBar position="fixed" drawerWidth={drawerWidth} open={open}>
+        <AppBar position="fixed" drawerWidth={drawerWidth} open={open} {...props}>
             <Toolbar>
                 <IconButton
                     color="inherit"

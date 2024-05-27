@@ -1,10 +1,5 @@
 import { Box, styled } from "@mui/material";
 
-interface MainCustomProps {
-    drawerWidth?: number;
-    open?: boolean;
-}
-
 export const StyledBox = styled(Box)`
     display: flex;
 `

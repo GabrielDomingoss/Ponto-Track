@@ -5,7 +5,7 @@ interface DrawerCustomProps extends DrawerProps {
     open: boolean;
 }
 
-export const StyledDrawer = styled(Drawer)<DrawerCustomProps>(({drawerWidth, open}) => ({
+export const StyledDrawer = styled(Drawer)<DrawerCustomProps>(({drawerWidth}) => ({
     width: drawerWidth,
     flexShrink: 0,
     '& .MuiDrawer-paper': {
