@@ -75,14 +75,21 @@ npm run dev
 ```plaintext
 ponto-track-app/
 ├── ponto-track-api/
+│   ├── build/
+│   ├── db/
 │   ├── src/
-│   │   ├── controllers/
-│   │   ├── models/
+│   │   ├── @types/
+│   │   ├── env/
 │   │   ├── routes/
-│   │   ├── services/
-│   │   ├── index.ts
-│   ├── package.json
-│   ├── tsconfig.json
+│   │   ├── database.ts
+│   │   ├── server.ts
+│   │   ├── swagger.ts
+│   ├── .env.example
+│   ├── .eslintignore
+│   ├── .gitignore
+│   ├── README.md
+│   ├── eslint.config.mjs
+│   ├── knexfile.ts
 ├── README.md
 ```
 

@@ -81,12 +81,15 @@ ponto-track-app/
 │   ├── public/
 │   ├── src/
 │   │   ├── components/
-│   │   ├── hooks/
+│   │   ├── layout/
+│   │   ├── models/
 │   │   ├── pages/
 │   │   ├── services/
 │   │   ├── styles/
 │   │   ├── App.tsx
 │   │   ├── main.tsx
+│   │   ├── router.tsx
+│   │   ├── vite-env.d.ts
 │   ├── index.html
 │   ├── package.json
 │   ├── tsconfig.json

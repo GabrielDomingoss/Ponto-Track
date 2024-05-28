@@ -106,24 +106,34 @@ ponto-track-app/
 │   ├── public/
 │   ├── src/
 │   │   ├── components/
-│   │   ├── hooks/
+│   │   ├── layout/
+│   │   ├── models/
 │   │   ├── pages/
 │   │   ├── services/
 │   │   ├── styles/
 │   │   ├── App.tsx
 │   │   ├── main.tsx
+│   │   ├── router.tsx
+│   │   ├── vite-env.d.ts
 │   ├── index.html
 │   ├── package.json
 │   ├── tsconfig.json
 ├── ponto-track-api/
+│   ├── build/
+│   ├── db/
 │   ├── src/
-│   │   ├── controllers/
-│   │   ├── models/
+│   │   ├── @types/
+│   │   ├── env/
 │   │   ├── routes/
-│   │   ├── services/
-│   │   ├── index.ts
-│   ├── package.json
-│   ├── tsconfig.json
+│   │   ├── database.ts
+│   │   ├── server.ts
+│   │   ├── swagger.ts
+│   ├── .env.example
+│   ├── .eslintignore
+│   ├── .gitignore
+│   ├── README.md
+│   ├── eslint.config.mjs
+│   ├── knexfile.ts
 ├── README.md
 ```
 
