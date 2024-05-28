@@ -45,7 +45,7 @@ app.register(usersVehiclesRoutes, {
 
 app
   .listen({
-    host: "RENDER" in env ? `0.0.0.0` : `localhost`,
+    host: env.HOST,
     port: env.PORT,
   })
   .then(() => {
