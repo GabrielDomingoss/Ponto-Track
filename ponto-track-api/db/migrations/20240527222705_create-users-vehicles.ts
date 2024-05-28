@@ -2,8 +2,8 @@ import type { Knex } from "knex";
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable("users_vehicles", (table) => {
-    table.integer("user_id");
-    table.integer("vehicle_id");
+    table.uuid("user_id");
+    table.uuid("vehicle_id");
     table.timestamp("date_association").defaultTo(knex.fn.now());
     table.primary(["user_id", "vehicle_id"]);
     table
