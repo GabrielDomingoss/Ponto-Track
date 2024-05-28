@@ -6,16 +6,19 @@ import { ThemeProvider } from '@emotion/react'
 import theme from './styles/themes/default'
 import { GlobalStyle } from './styles/global'
 import 'dayjs/locale/pt-br'
+import { AuthProvider } from './layout/authProvider'
 function App() {
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
-      <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <Router />
-        </BrowserRouter>
-        <GlobalStyle />
-      </ThemeProvider>
-    </LocalizationProvider>
+    <AuthProvider>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
+        <ThemeProvider theme={theme}>
+          <BrowserRouter>
+            <Router />
+          </BrowserRouter>
+          <GlobalStyle />
+        </ThemeProvider>
+      </LocalizationProvider>
+    </AuthProvider>
   )
 }
 

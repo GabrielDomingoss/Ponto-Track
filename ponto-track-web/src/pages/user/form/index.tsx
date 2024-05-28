@@ -152,6 +152,20 @@ export function UserForm() {
                 ></DatePicker>
               </FormControl>
             </Grid>
+            <Grid item xs>
+              <FormControl fullWidth variant="outlined">
+                <FormLabel>Senha</FormLabel>
+                <TextField
+                  required
+                  placeholder="Insira a senha"
+                  size="small"
+                  value={userData.password}
+                  onChange={(e) =>
+                    handleChangeUserData('password', e.target.value)
+                  }
+                ></TextField>
+              </FormControl>
+            </Grid>
           </Grid>
 
           <Grid container marginBottom={2}>

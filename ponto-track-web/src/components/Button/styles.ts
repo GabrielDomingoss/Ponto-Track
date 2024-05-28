@@ -1,5 +1,9 @@
-import { Button, ButtonProps, styled } from "@mui/material";
+import { Button, ButtonProps, styled } from '@mui/material'
 
-export const StyledButton = styled(Button)<ButtonProps>`
-    width: max-content+'1rem';
+interface ButtonCustomProps extends ButtonProps {}
+export const StyledButton = styled(Button)<ButtonCustomProps>`
+  width: max-content + '1rem';
+  color: ${(props) =>
+    props.variant === 'text' ? props.theme.palette.primary.main : 'white'};
+  text-transform: none;
 `

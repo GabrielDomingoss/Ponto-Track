@@ -8,13 +8,11 @@ import {
   TextField,
 } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
-import { IUser } from '../../../models/user'
+import { IVehicle } from '../../../models/vehicle'
 import api from '../../../services/api'
 import { Button } from '../../../components/Button'
-import { DatePicker } from '@mui/x-date-pickers'
-import dayjs from 'dayjs'
 
-interface EditUserModalProps {
+interface EditVehicleModalProps {
   isEdit: boolean
   handleClose: () => void
   id?: string
@@ -25,43 +23,36 @@ export function EditModal({
   handleClose,
   id,
   open,
-}: EditUserModalProps) {
-  const [userData, setUserData] = useState<IUser>({
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
-    birth: '',
-    password: '',
+}: EditVehicleModalProps) {
+  const [vehicleData, setVehicleData] = useState<IVehicle>({
+    board: '',
+    model: '',
+    brand: '',
+    year: 1,
+    color: '',
   })
-  const handleChangeUserData = useCallback(
-    (property: string, value: string) => {
-      setUserData({ ...userData, [property]: value })
+  const handleChangevehicleData = useCallback(
+    (property: string, value: string | number) => {
+      console.log(typeof value)
+      setVehicleData({ ...vehicleData, [property]: value })
     },
-    [userData],
+    [vehicleData],
   )
 
   useEffect(() => {
-    const handleGetUserData = async () => {
+    const handleGetvehicleData = async () => {
       try {
-        const response = await api.get(`/api/users/${id}`)
+        const response = await api.get(`/api/vehicles/${id}`)
         if (response.status === 200) {
-          const responseData = response.data.user
-          const dateBirthFormated = responseData.birth.split('-')
-          const user = {
-            name: responseData.name,
-            email: responseData.email,
-            phone: responseData.phone,
-            address: responseData.address,
-            password: responseData.password,
-            birth:
-              dateBirthFormated[0] +
-              '-' +
-              dateBirthFormated[1] +
-              '-' +
-              dateBirthFormated[2],
+          const responseData = response.data.vehicle
+          const vehicle = {
+            board: responseData.board,
+            model: responseData.model,
+            brand: responseData.brand,
+            year: responseData.year,
+            color: responseData.color,
           }
-          setUserData(user)
+          setVehicleData(vehicle)
         }
       } catch (err: any) {
         console.log(err?.response)
@@ -69,24 +60,23 @@ export function EditModal({
     }
 
     if (id) {
-      handleGetUserData()
+      handleGetvehicleData()
     }
   }, [id])
 
   const handleSubmit = useCallback(
     async (e: { preventDefault: () => void }) => {
       e.preventDefault()
-      const data: IUser = {
-        name: userData.name,
-        email: userData.email,
-        phone: userData.phone,
-        address: userData.address,
-        birth: userData.birth,
-        password: 'senha123',
+      const data: IVehicle = {
+        board: vehicleData.board,
+        model: vehicleData.model,
+        brand: vehicleData.brand,
+        year: vehicleData.year,
+        color: vehicleData.color,
       }
 
       try {
-        const response = await api.put(`/api/users/${id}`, data)
+        const response = await api.put(`/api/vehicles/${id}`, data)
         if (response.status === 201) {
           handleClose()
         }
@@ -97,30 +87,32 @@ export function EditModal({
     [
       handleClose,
       id,
-      userData.address,
-      userData.birth,
-      userData.email,
-      userData.name,
-      userData.phone,
+      vehicleData.board,
+      vehicleData.brand,
+      vehicleData.color,
+      vehicleData.model,
+      vehicleData.year,
     ],
   )
   return (
     <Dialog onClose={handleClose} open={open}>
       <DialogTitle>
-        {isEdit ? 'Editar Usuário' : 'Visualizar Usuário'}
+        {isEdit ? 'Editar Veículo' : 'Visualizar Veículo'}
       </DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <Grid container marginBottom={2} marginTop={2}>
             <Grid item xs>
               <FormControl fullWidth variant="outlined">
-                <FormLabel>Nome</FormLabel>
+                <FormLabel>Placa</FormLabel>
                 <TextField
                   required
-                  placeholder="Seu nome"
+                  placeholder="Placa do Veículo"
                   disabled={!isEdit}
-                  value={userData.name}
-                  onChange={(e) => handleChangeUserData('name', e.target.value)}
+                  value={vehicleData.board}
+                  onChange={(e) =>
+                    handleChangevehicleData('board', e.target.value)
+                  }
                 ></TextField>
               </FormControl>
             </Grid>
@@ -129,14 +121,14 @@ export function EditModal({
           <Grid container marginBottom={2}>
             <Grid item xs>
               <FormControl fullWidth variant="outlined">
-                <FormLabel>E-mail</FormLabel>
+                <FormLabel>Modelo</FormLabel>
                 <TextField
                   required
-                  placeholder="Insira o seu e-mail"
+                  placeholder="Insira o modelo do veículo"
                   disabled={!isEdit}
-                  value={userData.email}
+                  value={vehicleData.model}
                   onChange={(e) =>
-                    handleChangeUserData('email', e.target.value)
+                    handleChangevehicleData('model', e.target.value)
                   }
                 ></TextField>
               </FormControl>
@@ -146,14 +138,14 @@ export function EditModal({
           <Grid container marginBottom={2} spacing={3}>
             <Grid item xs>
               <FormControl fullWidth variant="outlined">
-                <FormLabel>Endereço</FormLabel>
+                <FormLabel>Marca</FormLabel>
                 <TextField
                   required
-                  placeholder="Insira o seu endereço"
+                  placeholder="Insira a marca do veículo"
                   disabled={!isEdit}
-                  value={userData.address}
+                  value={vehicleData.brand}
                   onChange={(e) =>
-                    handleChangeUserData('address', e.target.value)
+                    handleChangevehicleData('brand', e.target.value)
                   }
                 ></TextField>
               </FormControl>
@@ -161,42 +153,33 @@ export function EditModal({
 
             <Grid item xs>
               <FormControl fullWidth variant="outlined">
-                <FormLabel>Telefone</FormLabel>
+                <FormLabel>Ano</FormLabel>
                 <TextField
                   required
-                  placeholder="Insira o seu telefone"
+                  placeholder="Insira o ano do seu veículo"
                   disabled={!isEdit}
-                  value={userData.phone}
-                  onChange={(e) =>
-                    handleChangeUserData('phone', e.target.value)
-                  }
-                ></TextField>
-              </FormControl>
-            </Grid>
-          </Grid>
-
-          <Grid container marginBottom={2} spacing={3}>
-            <Grid item xs>
-              <FormControl fullWidth variant="outlined">
-                <FormLabel>Data de Nascimento</FormLabel>
-                <DatePicker
-                  value={dayjs(userData.birth)}
-                  onChange={(newValue) =>
-                    handleChangeUserData(
-                      'birth',
-                      dayjs(newValue).format('YYYY-MM-DD'),
-                    )
-                  }
-                  disabled={!isEdit}
-                  slotProps={{
-                    textField: {
-                      disabled: !isEdit,
-                      required: true,
-                      size: 'small',
-                      placeholder: 'Insira sua data de nascimento',
-                    },
+                  value={Number(vehicleData.year)}
+                  onChange={(e) => {
+                    handleChangevehicleData('year', Number(e.target.value))
                   }}
-                ></DatePicker>
+                ></TextField>
+              </FormControl>
+            </Grid>
+          </Grid>
+
+          <Grid container marginBottom={2} spacing={3}>
+            <Grid item xs>
+              <FormControl fullWidth variant="outlined">
+                <FormLabel>Color</FormLabel>
+                <TextField
+                  required
+                  placeholder="Insira a cor do seu veículo"
+                  disabled={!isEdit}
+                  value={vehicleData.color}
+                  onChange={(e) =>
+                    handleChangevehicleData('color', e.target.value)
+                  }
+                ></TextField>
               </FormControl>
             </Grid>
           </Grid>

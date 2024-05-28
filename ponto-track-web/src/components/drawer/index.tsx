@@ -16,6 +16,8 @@ import {
   Person,
 } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useAuth } from '../../layout/authProvider'
 
 interface CustomDrawerProps {
   open: boolean
@@ -32,7 +34,13 @@ export function Drawer({
   theme,
   drawerWidth,
 }: CustomDrawerProps) {
+  const { isAuthenticated } = useAuth()
   const navigate = useNavigate()
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login')
+    }
+  }, [isAuthenticated, navigate])
   return (
     <div>
       <Header

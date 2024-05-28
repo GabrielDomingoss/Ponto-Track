@@ -11,35 +11,41 @@ import {
   TableRow,
 } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
-import { IUser } from '../../../models/user'
 import api from '../../../services/api'
 import { Article, Delete, Edit } from '@mui/icons-material'
 import { EditModal } from '../editModal'
 import { Button } from '../../../components/Button'
 import { useNavigate } from 'react-router-dom'
+import { IVehicle } from '../../../models/vehicle'
 
-export function UsersList() {
-  const [users, setUsers] = useState<IUser[]>([])
+export function VehiclesList() {
+  const [vehicles, setVehicles] = useState<IVehicle[]>([])
   const [id, setId] = useState<string | undefined>('')
   const [isEdit, setIsEdit] = useState(false)
   const [openDetailModal, setOpenDetailModal] = useState(false)
   useEffect(() => {
-    const getUsers = async () => {
-      await api.get('/api/users').then((res) => {
-        setUsers(res.data.users)
+    const getvehicles = async () => {
+      await api.get('/api/vehicles').then((res) => {
+        setVehicles(res.data.vehicles)
       })
     }
 
-    getUsers()
+    getvehicles()
   }, [])
+
+  const getvehicles = async () => {
+    await api.get('/api/vehicles').then((res) => {
+      setVehicles(res.data.vehicles)
+    })
+  }
 
   const handleDelete = useCallback(
     async (e: { preventDefault: () => void }, idUser?: string) => {
       e.preventDefault()
 
       if (idUser) {
-        await api.delete(`/api/users/${idUser}`).then((res) => {
-          setUsers(res.data.users)
+        await api.delete(`/api/vehicles/${idUser}`).then(() => {
+          getvehicles()
         })
       } else {
         throw new Error('there is no id to delete')
@@ -48,7 +54,7 @@ export function UsersList() {
     [],
   )
 
-  const handleEdit = (row: IUser, isEdit: boolean) => {
+  const handleEdit = (row: IVehicle, isEdit: boolean) => {
     setId(row.id)
     setOpenDetailModal(true)
     setIsEdit(isEdit)
@@ -58,6 +64,7 @@ export function UsersList() {
     setId('')
     setOpenDetailModal(false)
     setIsEdit(false)
+    getvehicles()
   }
 
   const navigate = useNavigate()
@@ -66,18 +73,18 @@ export function UsersList() {
       <CardContent>
         <Grid container marginBottom={2}>
           <Grid item xs>
-            <h2>Usuários</h2>
+            <h2>Veículos</h2>
           </Grid>
         </Grid>
 
         <Grid container marginBottom={2}>
           <Grid item xs display={'flex'} justifyContent={'end'}>
             <Button
-              onClick={() => navigate('/users/form')}
+              onClick={() => navigate('/vehicles/form')}
               size="small"
               variant="contained"
             >
-              Cadastrar usuário
+              Cadastrar veículo
             </Button>
           </Grid>
         </Grid>
@@ -87,25 +94,29 @@ export function UsersList() {
             <TableContainer>
               <Table>
                 <TableHead>
-                  <TableCell>Nome</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Telefone</TableCell>
+                  <TableCell>Placa</TableCell>
+                  <TableCell>Modelo</TableCell>
+                  <TableCell>Marca</TableCell>
+                  <TableCell>Ano</TableCell>
                   <TableCell>Ações</TableCell>
                 </TableHead>
                 <TableBody>
-                  {users.map((user) => (
-                    <TableRow key={user.id}>
-                      <TableCell>{user.name}</TableCell>
-                      <TableCell>{user.email}</TableCell>
-                      <TableCell>{user.phone}</TableCell>
+                  {vehicles.map((vehicle) => (
+                    <TableRow key={vehicle.id}>
+                      <TableCell>{vehicle.board}</TableCell>
+                      <TableCell>{vehicle.model}</TableCell>
+                      <TableCell>{vehicle.brand}</TableCell>
+                      <TableCell>{vehicle.year}</TableCell>
                       <TableCell>
-                        <IconButton onClick={() => handleEdit(user, true)}>
+                        <IconButton onClick={() => handleEdit(vehicle, true)}>
                           <Edit />
                         </IconButton>
-                        <IconButton onClick={(e) => handleDelete(e, user.id)}>
+                        <IconButton
+                          onClick={(e) => handleDelete(e, vehicle.id)}
+                        >
                           <Delete />
                         </IconButton>
-                        <IconButton onClick={() => handleEdit(user, false)}>
+                        <IconButton onClick={() => handleEdit(vehicle, false)}>
                           <Article />
                         </IconButton>
                       </TableCell>

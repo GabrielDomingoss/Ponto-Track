@@ -33,13 +33,19 @@ export function UsersList() {
     getUsers()
   }, [])
 
+  const getUsers = async () => {
+    await api.get('/api/users').then((res) => {
+      setUsers(res.data.users)
+    })
+  }
+
   const handleDelete = useCallback(
     async (e: { preventDefault: () => void }, idUser?: string) => {
       e.preventDefault()
 
       if (idUser) {
-        await api.delete(`/api/users/${idUser}`).then((res) => {
-          setUsers(res.data.users)
+        await api.delete(`/api/users/${idUser}`).then(() => {
+          getUsers()
         })
       } else {
         throw new Error('there is no id to delete')
@@ -58,6 +64,7 @@ export function UsersList() {
     setId('')
     setOpenDetailModal(false)
     setIsEdit(false)
+    getUsers()
   }
 
   const navigate = useNavigate()

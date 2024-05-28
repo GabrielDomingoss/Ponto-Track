@@ -8,52 +8,48 @@ import {
 } from '@mui/material'
 import { Button } from '../../../components/Button'
 import { useCallback, useState } from 'react'
-import { IUser } from '../../../models/user'
 import { useNavigate } from 'react-router-dom'
 import api from '../../../services/api'
-import { DatePicker } from '@mui/x-date-pickers'
-import dayjs from 'dayjs'
+import { IVehicle } from '../../../models/vehicle'
 
-export function UserForm() {
+export function VehicleForm() {
   const navigate = useNavigate()
-  const [userData, setUserData] = useState<IUser>({
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
-    birth: dayjs(),
-    password: '',
+  const [vehicleData, setVehicleData] = useState<IVehicle>({
+    board: '',
+    model: '',
+    brand: '',
+    year: 0,
+    color: '',
   })
 
-  const handleChangeUserData = useCallback(
+  const handleChangevehicleData = useCallback(
     (property: string, value: string) => {
-      setUserData({ ...userData, [property]: value })
+      setVehicleData({ ...vehicleData, [property]: value })
     },
-    [userData],
+    [vehicleData],
   )
 
   const handleSubmit = useCallback(
     async (e: { preventDefault: () => void }) => {
       e.preventDefault()
-      const data: IUser = {
-        name: userData.name,
-        email: userData.email,
-        phone: userData.phone,
-        address: userData.address,
-        birth: userData.birth,
-        password: 'senha123',
+      const data: IVehicle = {
+        board: vehicleData.board,
+        model: vehicleData.model,
+        brand: vehicleData.brand,
+        year: vehicleData.year,
+        color: vehicleData.color,
       }
 
       try {
-        const response = await api.post('/api/users', data)
+        const response = await api.post('/api/vehicles', data)
         if (response.status === 200) {
-          navigate('/pets')
+          navigate('/vehicles')
         }
       } catch (err: any) {
         console.log(err?.response)
       }
     },
-    [userData, navigate],
+    [vehicleData, navigate],
   )
 
   return (
@@ -61,7 +57,7 @@ export function UserForm() {
       <CardContent>
         <Grid container marginBottom={2}>
           <Grid item xs>
-            <h2>Cadastro de usuário</h2>
+            <h2>Cadastro de Veículo</h2>
           </Grid>
         </Grid>
 
@@ -69,13 +65,15 @@ export function UserForm() {
           <Grid container marginBottom={2} marginTop={2}>
             <Grid item xs>
               <FormControl fullWidth variant="outlined">
-                <FormLabel>Nome</FormLabel>
+                <FormLabel>Placa</FormLabel>
                 <TextField
                   required
-                  placeholder="Seu nome"
+                  placeholder="Placa do veículo"
                   size="small"
-                  value={userData.name}
-                  onChange={(e) => handleChangeUserData('name', e.target.value)}
+                  value={vehicleData.board}
+                  onChange={(e) =>
+                    handleChangevehicleData('board', e.target.value)
+                  }
                 ></TextField>
               </FormControl>
             </Grid>
@@ -84,14 +82,14 @@ export function UserForm() {
           <Grid container marginBottom={2}>
             <Grid item xs>
               <FormControl fullWidth variant="outlined">
-                <FormLabel>E-mail</FormLabel>
+                <FormLabel>Modelo</FormLabel>
                 <TextField
                   required
-                  placeholder="Insira o seu e-mail"
+                  placeholder="Insira o modelo do veículo"
                   size="small"
-                  value={userData.email}
+                  value={vehicleData.model}
                   onChange={(e) =>
-                    handleChangeUserData('email', e.target.value)
+                    handleChangevehicleData('model', e.target.value)
                   }
                 ></TextField>
               </FormControl>
@@ -101,14 +99,14 @@ export function UserForm() {
           <Grid container marginBottom={2} spacing={3}>
             <Grid item xs>
               <FormControl fullWidth variant="outlined">
-                <FormLabel>Endereço</FormLabel>
+                <FormLabel>Marca</FormLabel>
                 <TextField
                   required
-                  placeholder="Insira o seu endereço"
+                  placeholder="Insira a marca do seu veículo"
                   size="small"
-                  value={userData.address}
+                  value={vehicleData.brand}
                   onChange={(e) =>
-                    handleChangeUserData('address', e.target.value)
+                    handleChangevehicleData('brand', e.target.value)
                   }
                 ></TextField>
               </FormControl>
@@ -116,14 +114,14 @@ export function UserForm() {
 
             <Grid item xs>
               <FormControl fullWidth variant="outlined">
-                <FormLabel>Telefone</FormLabel>
+                <FormLabel>Ano</FormLabel>
                 <TextField
                   required
-                  placeholder="Insira o seu telefone"
+                  placeholder="Insira o ano do veículo"
                   size="small"
-                  value={userData.phone}
+                  value={vehicleData.year}
                   onChange={(e) =>
-                    handleChangeUserData('phone', e.target.value)
+                    handleChangevehicleData('year', e.target.value)
                   }
                 ></TextField>
               </FormControl>
@@ -133,23 +131,16 @@ export function UserForm() {
           <Grid container marginBottom={2} spacing={3}>
             <Grid item xs>
               <FormControl fullWidth variant="outlined">
-                <FormLabel>Data de Nascimento</FormLabel>
-                <DatePicker
-                  value={dayjs(userData.birth)}
-                  onChange={(newValue) =>
-                    handleChangeUserData(
-                      'birth',
-                      dayjs(newValue).format('YYYY-MM-DD'),
-                    )
+                <FormLabel>Cor</FormLabel>
+                <TextField
+                  required
+                  placeholder="Insira a cor do veículo"
+                  size="small"
+                  value={vehicleData.color}
+                  onChange={(e) =>
+                    handleChangevehicleData('color', e.target.value)
                   }
-                  slotProps={{
-                    textField: {
-                      required: true,
-                      size: 'small',
-                      placeholder: 'Insira sua data de nascimento',
-                    },
-                  }}
-                ></DatePicker>
+                ></TextField>
               </FormControl>
             </Grid>
           </Grid>

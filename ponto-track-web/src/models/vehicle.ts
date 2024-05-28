@@ -1,7 +1,8 @@
-export interface IVehicle{
-    board: string,
-    model: string,
-    brand: string,
-    year: string,
-    color: string,
+export interface IVehicle {
+  id?: string
+  board: string
+  model: string
+  brand: string
+  year: number
+  color: string
 }
