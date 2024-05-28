@@ -45,9 +45,9 @@ app.register(usersVehiclesRoutes, {
 
 app
   .listen({
+    host: "0.0.0.0",
     port: env.PORT,
   })
   .then(() => {
-    app.swagger();
     console.log("HTTP Server Running!");
   });
