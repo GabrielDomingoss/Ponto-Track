@@ -27,6 +27,7 @@ export function Login() {
         const response = await api.post('/api/login', data)
         if (response.status === 200) {
           localStorage.setItem('token', response.data.token)
+          localStorage.setItem('username', response.data.user.name)
           setAuthenticated(true)
           navigate('/users')
         }

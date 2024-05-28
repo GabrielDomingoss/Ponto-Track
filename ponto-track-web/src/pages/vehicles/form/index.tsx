@@ -42,7 +42,7 @@ export function VehicleForm() {
 
       try {
         const response = await api.post('/api/vehicles', data)
-        if (response.status === 200) {
+        if (response.status === 201 || response.status === 200) {
           navigate('/vehicles')
         }
       } catch (err: any) {

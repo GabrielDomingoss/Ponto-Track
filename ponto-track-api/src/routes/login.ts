@@ -41,7 +41,6 @@ export async function loginRoutes(app: FastifyInstance) {
         .where({ email })
         .first()) as UserBodySchema;
 
-      console.log(user.password, password);
       if (!user || !(await bcrypt.compare(password, user.password))) {
         return reply.code(401).send({ message: "Invalid Credentials" });
       }

@@ -2,13 +2,20 @@ import { ListItemIcon, Menu, MenuItem } from '@mui/material'
 import { Button } from '../Button'
 import { KeyboardArrowDown, Logout } from '@mui/icons-material'
 import { StyledAvatar } from './styles'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuth } from '../../layout/authProvider'
 
 export function UserMenu() {
+  const [initialUsername, setInitialUsername] = useState('')
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const { logout } = useAuth()
 
+  useEffect(() => {
+    const username = localStorage.getItem('username')
+    if (username) {
+      setInitialUsername(username[0].toUpperCase())
+    }
+  }, [])
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
@@ -35,7 +42,7 @@ export function UserMenu() {
         color="inherit"
         endIcon={<KeyboardArrowDown />}
       >
-        <StyledAvatar>M</StyledAvatar>
+        <StyledAvatar>{initialUsername}</StyledAvatar>
       </Button>
       <Menu
         id="menu-appbar"
