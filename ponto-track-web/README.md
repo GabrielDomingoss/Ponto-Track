@@ -20,6 +20,7 @@ Este é um projeto de cadastro de usuários para um sistema de rastreamento de v
 
 Este projeto tem como objetivo criar um sistema de cadastro de usuários para um sistema de rastreamento de veículos para um teste na Ponto Track Rastreamento de veículos.
 O frontend foi desenvolvido com React utilizando Vite, Material UI com Styled Components e TypeScript.
+No banco de dados local está sendo utilizado o sqlite e em produção utilizou-se o Postgres
 
 ## Tecnologias Utilizadas
 
