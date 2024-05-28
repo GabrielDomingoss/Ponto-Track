@@ -4,8 +4,19 @@ import cors from "@fastify/cors";
 import { vehiclesRoutes } from "./routes/vehicles";
 import { usersVehiclesRoutes } from "./routes/users_vehicles";
 import { usersRoutes } from "./routes/users";
-import { loginRoutes } from "./routes/login";
+import { authenticateToken, loginRoutes } from "./routes/login";
 const app = fastify();
+
+app.addHook("preHandler", async (request, reply) => {
+  if (
+    (request.routeOptions.url === "/api/users" && request.method === "POST") ||
+    request.routeOptions.url === "/api/login"
+  ) {
+    return;
+  }
+
+  await authenticateToken(request, reply);
+});
 
 app.register(cors, {
   origin: "*",

@@ -3,19 +3,30 @@ import { knex } from "../database";
 import { z } from "zod";
 
 export async function usersVehiclesRoutes(app: FastifyInstance) {
-  app.get("/user_vehicles", async (userId) => {
+  app.get("/user_vehicles/:id", async (request) => {
+    const getUserParamsSchema = z.object({
+      id: z.string().uuid(),
+    });
+
+    const { id } = getUserParamsSchema.parse(request.params);
     const userVehicles = await knex("vehicles")
       .join("users_vehicles", "vehicles.id", "=", "users_vehicles.vehicle_id")
-      .where("users_vehicles.user_id", userId)
+      .where("users_vehicles.user_id", id)
       .select("vehicles.*");
 
     return { userVehicles };
   });
 
-  app.get("/users_by_vehicles", async (veiculoId) => {
+  app.get("/users_by_vehicles/:id", async (request) => {
+    const getUserParamsSchema = z.object({
+      id: z.string().uuid(),
+    });
+
+    const { id } = getUserParamsSchema.parse(request.params);
+
     const users = await knex("users")
       .join("users_vehicles", "users.id", "=", "users_vehicles.user_id")
-      .where("users_vehicles.vehicle_id", veiculoId)
+      .where("users_vehicles.vehicle_id", id)
       .select("users.*");
 
     return { users };

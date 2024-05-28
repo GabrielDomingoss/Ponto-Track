@@ -5,7 +5,12 @@ const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("production"),
   DATABASE_URL: z.string(),
   DATABASE_CLIENT: z.enum(["sqlite", "pg"]),
+  DATABASE_HOST: z.string(),
+  DATABASE_USER: z.string(),
+  DATABASE_PASSWORD: z.string(),
+  DATABASE_NAME: z.string(),
   PORT: z.coerce.number().default(3333),
+  DATABASE_PORT: z.coerce.number().default(3333),
 });
 
 const _env = envSchema.safeParse(process.env);

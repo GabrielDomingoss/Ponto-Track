@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { knex } from "../database";
 import { z } from "zod";
-import { bcrypt } from "bcryptjs";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET;
