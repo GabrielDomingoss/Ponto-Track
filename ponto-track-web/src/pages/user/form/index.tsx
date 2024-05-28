@@ -159,6 +159,7 @@ export function UserForm() {
                   required
                   placeholder="Insira a senha"
                   size="small"
+                  type="password"
                   value={userData.password}
                   onChange={(e) =>
                     handleChangeUserData('password', e.target.value)
