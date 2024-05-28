@@ -25,7 +25,6 @@ export const setupSwagger = (app: FastifyInstance): void => {
   app.register(fastifySwaggerUi, {
     routePrefix: "/api/docs",
     uiConfig: {
-      url: "ponto-trackponto-track-api/src/swagger.yaml",
       docExpansion: "none",
       deepLinking: false,
     },
