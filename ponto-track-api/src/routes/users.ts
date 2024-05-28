@@ -85,68 +85,33 @@ export async function usersRoutes(app: FastifyInstance) {
     return reply.status(201).send({ user });
   });
 
-  app.post(
-    "/",
-    {
-      schema: {
-        body: {
-          type: "object",
-          required: [
-            "nome",
-            "email",
-            "telefone",
-            "endereco",
-            "data_nascimento",
-            "senha",
-          ],
-          properties: {
-            nome: { type: "string" },
-            email: { type: "string" },
-            telefone: { type: "string" },
-            endereco: { type: "string" },
-            data_nascimento: { type: "string" },
-            senha: { type: "string" },
-          },
-        },
-        response: {
-          201: {
-            type: "object",
-            properties: {
-              user: { type: "object" },
-              token: { type: "string" },
-            },
-          },
-        },
-      },
-    },
-    async (request, reply) => {
-      const createUserBodySchema = z.object({
-        name: z.string(),
-        email: z.string(),
-        phone: z.string(),
-        birth: z.string(),
-        address: z.string(),
-        password: z.string(),
-      });
-      const body = createUserBodySchema.parse(request.body);
-      const hashedPassword = await bcrypt.hash(body.password, 10);
-      const userId = crypto.randomUUID();
-      await knex("users").insert({
-        id: userId,
-        name: body.name,
-        email: body.email,
-        phone: body.phone,
-        birth: body.birth,
-        address: body.address,
-        password: hashedPassword,
-      });
+  app.post("/", async (request, reply) => {
+    const createUserBodySchema = z.object({
+      name: z.string(),
+      email: z.string(),
+      phone: z.string(),
+      birth: z.string(),
+      address: z.string(),
+      password: z.string(),
+    });
+    const body = createUserBodySchema.parse(request.body);
+    const hashedPassword = await bcrypt.hash(body.password, 10);
+    const userId = crypto.randomUUID();
+    await knex("users").insert({
+      id: userId,
+      name: body.name,
+      email: body.email,
+      phone: body.phone,
+      birth: body.birth,
+      address: body.address,
+      password: hashedPassword,
+    });
 
-      const newUser = (await knex("users")
-        .where({ id: userId })
-        .first()) as UserBodySchema;
-      const token = generateToken(newUser);
+    const newUser = (await knex("users")
+      .where({ id: userId })
+      .first()) as UserBodySchema;
+    const token = generateToken(newUser);
 
-      return reply.status(201).send({ user: newUser, token });
-    },
-  );
+    return reply.status(201).send({ user: newUser, token });
+  });
 }
