@@ -23,39 +23,11 @@ export function generateToken(user: UserBodySchema) {
 }
 
 export async function usersRoutes(app: FastifyInstance) {
-  app.get(
-    "/",
-    {
-      schema: {
-        response: {
-          200: {
-            type: "object",
-            properties: {
-              users: {
-                type: "array",
-                items: {
-                  type: "object",
-                  properties: {
-                    id: { type: "string" },
-                    nome: { type: "string" },
-                    email: { type: "string" },
-                    telefone: { type: "string" },
-                    endereco: { type: "string" },
-                    data_nascimento: { type: "string" },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    async () => {
-      const users = await knex("users").select();
+  app.get("/", async () => {
+    const users = await knex("users").select();
 
-      return { users };
-    },
-  );
+    return { users };
+  });
 
   app.get("/:id", async (request) => {
     const getUserParamsSchema = z.object({
