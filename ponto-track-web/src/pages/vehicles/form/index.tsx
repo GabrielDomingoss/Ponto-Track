@@ -36,7 +36,7 @@ export function VehicleForm() {
         board: vehicleData.board,
         model: vehicleData.model,
         brand: vehicleData.brand,
-        year: vehicleData.year,
+        year: Number(vehicleData.year),
         color: vehicleData.color,
       }
 
